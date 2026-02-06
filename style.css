@@ -151,6 +151,10 @@ h1 {
     height: 20px;
 }
 
+.scroll-btn .icon-down {
+    display: block;
+}
+
 .scroll-btn .icon-up {
     display: none;
 }
