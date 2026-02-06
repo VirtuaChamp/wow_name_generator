@@ -134,8 +134,33 @@ h1 {
 
 .copy-icon {
     color: #4a6a8a;
-    font-size: 1rem;
+    width: 16px;
+    height: 16px;
     transition: color 0.3s;
+    flex-shrink: 0;
+}
+
+.copy-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+}
+
+.scroll-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.scroll-btn .icon-up {
+    display: none;
+}
+
+.scroll-btn.at-bottom .icon-down {
+    display: none;
+}
+
+.scroll-btn.at-bottom .icon-up {
+    display: block;
 }
 
 .name-card:hover .copy-icon {
@@ -152,13 +177,14 @@ h1 {
     right: 20px;
     z-index: 100;
     display: none;
+    align-items: center;
+    justify-content: center;
     width: 45px;
     height: 45px;
     border: 1px solid #4a90d9;
     border-radius: 50%;
     background: linear-gradient(135deg, #1e5799 0%, #133a6b 100%);
     color: #ffd100;
-    font-size: 1.1rem;
     cursor: pointer;
     transition: transform 0.1s, box-shadow 0.1s;
     opacity: 0.7;

@@ -27,6 +27,12 @@ const ACCENT_VARIANTS = {
 
 const MAX_RESULTS = 500;
 
+const ICONS = {
+    clipboard: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" fill="currentColor"><path d="M280 64h40c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V128C0 92.7 28.7 64 64 64h40 9.6C121 27.5 153.3 0 192 0s71 27.5 78.4 64H280zM64 112c-8.8 0-16 7.2-16 16V448c0 8.8 7.2 16 16 16H320c8.8 0 16-7.2 16-16V128c0-8.8-7.2-16-16-16H304v24c0 13.3-10.7 24-24 24H192 104c-13.3 0-24-10.7-24-24V112H64zm128-8a24 24 0 1 0 0-48 24 24 0 1 0 0 48z"/></svg>',
+    check: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor"><path d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg>',
+    xmark: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" fill="currentColor"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>'
+};
+
 const getVariants = (char) => {
     const lower = char.toLowerCase();
     const isUpper = char !== lower;
@@ -89,19 +95,19 @@ const generateVariations = (name) => {
 };
 
 const copyToClipboard = async (text, card) => {
-    const icon = card.querySelector('i');
+    const iconSpan = card.querySelector('.copy-icon');
     try {
         await navigator.clipboard.writeText(text);
-        icon.className = 'fa-solid fa-check';
+        iconSpan.innerHTML = ICONS.check;
         card.classList.add('copied');
         setTimeout(() => {
-            icon.className = 'fa-regular fa-clipboard';
+            iconSpan.innerHTML = ICONS.clipboard;
             card.classList.remove('copied');
         }, 1500);
     } catch (err) {
-        icon.className = 'fa-solid fa-xmark';
+        iconSpan.innerHTML = ICONS.xmark;
         setTimeout(() => {
-            icon.className = 'fa-regular fa-clipboard';
+            iconSpan.innerHTML = ICONS.clipboard;
         }, 1500);
     }
 };
@@ -115,7 +121,7 @@ const renderResults = (variations) => {
     resultsContainer.innerHTML = variations.map(name => `
         <div class="name-card" data-name="${name}">
             <span class="name-text">${name}</span>
-            <span class="copy-icon"><i class="fa-regular fa-clipboard"></i></span>
+            <span class="copy-icon">${ICONS.clipboard}</span>
         </div>
     `).join('');
 
@@ -147,15 +153,14 @@ document.getElementById('nameInput').addEventListener('keypress', (e) => {
 });
 
 const scrollBtn = document.getElementById('scrollBtn');
-const scrollIcon = scrollBtn.querySelector('i');
 
 const updateScrollButton = () => {
     const maxScroll = document.body.scrollHeight - window.innerHeight;
 
-    scrollBtn.style.display = maxScroll > 100 ? 'block' : 'none';
+    scrollBtn.style.display = maxScroll > 100 ? 'flex' : 'none';
 
     const isAtBottom = window.scrollY >= maxScroll - 50;
-    scrollIcon.className = isAtBottom ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down';
+    scrollBtn.classList.toggle('at-bottom', isAtBottom);
 };
 
 scrollBtn.addEventListener('click', () => {
